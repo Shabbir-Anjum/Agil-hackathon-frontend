@@ -1,4 +1,4 @@
-'use client'
+// Sidebar.jsx
 
 import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
@@ -40,16 +40,15 @@ const Sidebar = ({ hamburg, setHamburg }) => {
   };
 
   const filteredOutings = outings.filter((outing) =>
-    outing.toLowerCase().includes(searchInput.toLowerCase())
+    outing.name.toLowerCase().includes(searchInput.toLowerCase())
   );
-  
 
   useEffect(() => {
     const fetchUserOutings = async () => {
       try {
         const data = await listOutings(serverUrl, userdata.email); // Use the getOutings function
         setOutings(data.outings);
-console.log(data.outings)
+
 
         setError('');
       } catch (error) {

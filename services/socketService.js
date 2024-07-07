@@ -6,7 +6,7 @@ import { addMessage, setSocketId } from '../store/ChatSlice';
 let socket;
 
 export const connectSocket = () => {
-  socket = io('http://localhost:5000');
+  socket = io('https://socket-service-4jt9.onrender.com');
 
   socket.on('connect', () => {
   

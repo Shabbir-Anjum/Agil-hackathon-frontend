@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
+
 const ChatWindow = ({ messages }) => {
   const messagesEndRef = useRef(null);
   const currentuser = useSelector((state) => state.chat.user);
