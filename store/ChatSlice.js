@@ -8,11 +8,7 @@ const initialState = {
   RoomName:'',
   socketId: "",
   user: null,
-<<<<<<< HEAD
   server_url: "https://teepon.onrender.com",
-=======
-  server_url: "http://localhost:5001/api",
->>>>>>> 7cdffcc38256bf9f6ef2a2c4fae8835d20b243ff
   userdata:null
 };
 

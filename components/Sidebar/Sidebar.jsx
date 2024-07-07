@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-// Sidebar.jsx
+'use client'
 
-=======
->>>>>>> 7cdffcc38256bf9f6ef2a2c4fae8835d20b243ff
 import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { FiSearch, FiPlus } from "react-icons/fi";
@@ -21,7 +18,6 @@ const Sidebar = ({ hamburg, setHamburg }) => {
   const dispatch = useDispatch();
   const serverUrl = useSelector((state) => state.chat.server_url);
   const userdata = useSelector((state) => state.chat.userdata);
-<<<<<<< HEAD
   const [outings, setOutings] = useState([]);
   const [error, setError] = useState("");
 
@@ -37,33 +33,6 @@ const Sidebar = ({ hamburg, setHamburg }) => {
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
-=======
-  const [outings, setOutings] = useState([])
-
-  const handleRoomClick = async (roomName) => {
-    // const data = [
-    //   { message: 'Hello', sender: 'user' },
-    //   { message: 'Hi', sender: 'friend' },
-    // ];
-
-    console.log(messages);
-    // post message
-
-    const data = await fetch(`${server_url}/chats`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "oid" : roomName
-      },
-    })
-      .then((res) => res.json())
-      .then((e) => {dispatch(setCurrentMessages(e)); console.log(e);});
-
-    setHamburg(false);
-    dispatch(setCurrentRoom(roomName));
-
-    router.push(`/chat/${roomName}`);
->>>>>>> 7cdffcc38256bf9f6ef2a2c4fae8835d20b243ff
   };
 
   const handleSearchChange = (e) => {
@@ -71,15 +40,16 @@ const Sidebar = ({ hamburg, setHamburg }) => {
   };
 
   const filteredOutings = outings.filter((outing) =>
-    outing?.toLowerCase().includes(searchInput.toLowerCase())
+    outing.toLowerCase().includes(searchInput.toLowerCase())
   );
+  
 
   useEffect(() => {
     const fetchUserOutings = async () => {
       try {
         const data = await listOutings(serverUrl, userdata.email); // Use the getOutings function
         setOutings(data.outings);
-
+console.log(data.outings)
 
         setError('');
       } catch (error) {
@@ -95,23 +65,6 @@ const Sidebar = ({ hamburg, setHamburg }) => {
 
   const photoURL = userdata?.photoURL || 'default-image-url.jpg';
 
-<<<<<<< HEAD
-=======
-  useEffect(()=>{
-    fetch(`${server_url}/list_outings`,{
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'email': userdata.email
-      }
-    }).then((res)=>res.json()).then((data)=>{
-      setOutings(data[0]?.outings);
-    })
-    // console.log(userdata.email);
-  },[])
-
-
->>>>>>> 7cdffcc38256bf9f6ef2a2c4fae8835d20b243ff
   return (
     <div
       className={`fixed md:static top-0 left-0 h-full z-10 md:w-80 w-screen max-w-md bg-white border-r border-gray-400 transition-transform transform ${hamburg ? "translate-x-0" : "-translate-x-full"
@@ -143,16 +96,9 @@ const Sidebar = ({ hamburg, setHamburg }) => {
               <li
                 key={index}
                 className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer"
-<<<<<<< HEAD
                 onClick={() => handleRoomClick(item.id,item.name)} 
               >
                 <div className="text-lg">{item.name}</div>
-=======
-                onClick={() => handleRoomClick(item)}
-              >
-                <div className="text-lg">{item}</div>
-                {/* <div className="text-gray-600">{'item.desc'}</div> */}
->>>>>>> 7cdffcc38256bf9f6ef2a2c4fae8835d20b243ff
               </li>
             ))}
 

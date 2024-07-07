@@ -52,19 +52,11 @@ const ChatRoom = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-<<<<<<< HEAD
     const datetime = new Date().toGMTString();
     sendMessage(messageInput, currentRoom, currentuser, datetime);
 
     fetch(`${serverUrl}/api/get-outings/${currentRoom}/chat/send`, {
       method: 'POST',
-=======
-    sendMessage(messageInput, currentRoom, currentuser);
-    setMessageInput("");
-    
-    fetch(`${server_url}/chats`, {
-      method: "POST",
->>>>>>> 7cdffcc38256bf9f6ef2a2c4fae8835d20b243ff
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': 'insomnia/9.2.0'
