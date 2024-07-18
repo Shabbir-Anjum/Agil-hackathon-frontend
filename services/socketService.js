@@ -1,4 +1,4 @@
-// src/services/socketService.js
+
 import { io } from 'socket.io-client';
 import store from '../store/store';
 import { addMessage, setSocketId } from '../store/ChatSlice';
@@ -15,7 +15,7 @@ export const connectSocket = () => {
 
   socket.on('receive-message', (data) => {
    store.dispatch(addMessage(data)); // Add received message to Redux
-   
+  
 });
 
   return socket;

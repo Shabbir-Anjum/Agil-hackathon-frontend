@@ -1,4 +1,4 @@
-// src/store/chatSlice.js
+
 import { createSlice } from "@reduxjs/toolkit";
 
 
@@ -20,7 +20,7 @@ const chatSlice = createSlice({
       const { content, sender, datetime } = action.payload;
       state.messages.push({ content: content,
         datetime:datetime, send_from: sender });
-      
+       
     
     },
     setCurrentRoom: (state, action) => {

@@ -25,21 +25,20 @@ const SignIn = () => {
         const refreshToken = res.user.refreshToken; // Get the refresh token
         const name = res.user.displayName;
         const email = res.user.email;
-
+        router.push('/');
     
 
         // Send token and user details to backend
         await sendUserDetailsToBackend(name, email, access_token, refreshToken);
-
+      
         sessionStorage.setItem('user', true);
         sessionStorage.setItem('accessToken', access_token); // Store the access token
 
-        router.push('/');
       } else {
         console.error('Google authentication failed');
       }
     } catch (e) {
-      console.error('Google sign-in error:', e);
+      console.error('Google sign-in error:');
     }
   };
 const sendUserDetailsToBackend = async (name, email, access_token, refreshToken) => {
