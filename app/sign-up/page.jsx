@@ -1,11 +1,13 @@
-'use client'
+'use client';
+
 import { useState } from 'react';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '@/services/firebase/config';
 import { useRouter } from 'next/navigation';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'; // Import icons for password visibility toggle
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
-import { setUser } from '@/store/ChatSlice'; // Adjust path as needed
+import { setUser } from '@/store/ChatSlice';
+import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -15,14 +17,15 @@ const SignUp = () => {
   const [error, setError] = useState('');
   const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
   const router = useRouter();
-  const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
-  const dispatch = useDispatch(); // Get the dispatch function from Redux
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const dispatch = useDispatch();
 
   const validateEmail = (email) => {
     return email.endsWith('@gmail.com');
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     if (!username) {
       setError('Please enter your username.');
       return;
@@ -42,10 +45,10 @@ const SignUp = () => {
     setError('');
     try {
       const res = await createUserWithEmailAndPassword(email, password);
-      console.log('from sigup',{ res });
-     
+      console.log('from signup', { res });
+
       sessionStorage.setItem('user', true);
-      dispatch(setUser(username)); // Store user information including username to Redux
+      dispatch(setUser(username));
       setEmail('');
       setPassword('');
       setConfirmPassword('');
@@ -64,62 +67,81 @@ const SignUp = () => {
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
-console.log('from input',username)
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <div className="bg-gray-800 p-10 rounded-lg shadow-xl w-96">
-        <h1 className="text-white text-2xl mb-5">Sign Up</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-600">
+      <div className="bg-white p-10 rounded-xl shadow-2xl w-96 max-w-md">
+        <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Create Account</h1>
         {error && <p className="text-red-500 mb-5">{error}</p>}
-        <input 
-          type="text" 
-          placeholder="Username" 
-          value={username} 
-          onChange={(e) => setUsername(e.target.value)} 
-          className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500"
-        />
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500"
-        />
-        <div className="relative">
-          <input 
-            type={passwordVisible ? 'text' : 'password'} 
-            placeholder="Password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500"
-          />
-          <div 
-            className="absolute text-white text-2xl top-3 right-3 cursor-pointer"
-            onClick={togglePasswordVisibility}
-          >
-            {passwordVisible ? <AiFillEyeInvisible className="text-gray-400" /> : <AiFillEye className="text-gray-400" />}
+        <form onSubmit={handleSignUp} className="space-y-4">
+          <div className="relative">
+            <FaUser className="absolute top-3 left-3 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
           </div>
-        </div>
-        <input 
-          type={passwordVisible ? 'text' : 'password'} 
-          placeholder="Confirm Password" 
-          value={confirmPassword} 
-          onChange={(e) => setConfirmPassword(e.target.value)} 
-          className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500"
-        />
-        <div className='flex gap-4'>
-          <button 
-            onClick={handleSignUp}
-            className="w-full p-3 bg-indigo-600 rounded text-white hover:bg-indigo-500"
+          <div className="relative">
+            <FaEnvelope className="absolute top-3 left-3 text-gray-400" />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <div className="relative">
+            <FaLock className="absolute top-3 left-3 text-gray-400" />
+            <input
+              type={passwordVisible ? 'text' : 'password'}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+            <div
+              className="absolute top-3 right-3 text-gray-400 cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              {passwordVisible ? <AiFillEyeInvisible /> : <AiFillEye />}
+            </div>
+          </div>
+          <div className="relative">
+            <FaLock className="absolute top-3 left-3 text-gray-400" />
+            <input
+              type={passwordVisible ? 'text' : 'password'}
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-300"
           >
             Sign Up
           </button>
-          <button 
-            onClick={() => router.push('/sign-in')}
-            className="w-full p-3 bg-indigo-600 rounded text-white hover:bg-indigo-500"
-          >
-            Sign In
-          </button>
+        </form>
+        <div className="mt-4 flex items-center justify-between">
+          <hr className="w-full border-gray-300" />
+          <span className="px-2 text-gray-500">or</span>
+          <hr className="w-full border-gray-300" />
         </div>
+        <button
+          onClick={() => router.push('/sign-in')}
+          className="w-full mt-4 flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg py-2 text-gray-700 hover:bg-gray-50 transition duration-300"
+        >
+          Already have an account? Sign in
+        </button>
       </div>
     </div>
   );

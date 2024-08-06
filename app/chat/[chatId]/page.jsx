@@ -14,10 +14,9 @@ import { IoSend } from "react-icons/io5";
 import ChatWindow from "@/components/ChatWindow";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ChatLayout from "@/components/ChatLayout";
-import { FaRobot,  FaArrowLeft } from "react-icons/fa";
-
+import { FaRobot, FaArrowLeft } from "react-icons/fa";
 import SubmitAIMessage from "@/components/SubmitAIMessage";
-import style from "./chat.module.css";
+import { motion } from 'framer-motion';
 
 const ChatRoom = () => {
   const [messageInput, setMessageInput] = useState("");
@@ -29,6 +28,8 @@ const ChatRoom = () => {
   const dispatch = useDispatch();
   const currentuser = useSelector((state) => state.chat.user);
   const serverUrl = useSelector((state) => state.chat.server_url);
+
+  // ... (keep all the existing useEffect and handler functions)
 
   useEffect(() => {
     connectSocket();
@@ -79,41 +80,40 @@ const ChatRoom = () => {
     setMessageInput(e.target.value);
   };
 
+
   return (
     <ProtectedRoute>
       <ChatLayout>
         {currentRoom && (
-          <>
-            <header className="bg-gray-200 text-white p-4 flex justify-between ">
-              <div className=" flex gap-4">  <button
-                className=" text-black hover:text-blue-700"
-                onClick={()=>{router.push('/');}}
-              >
-                <FaArrowLeft size={20} className="mr-2" />
-              </button>
-                <div className="text-lg pl-10 text-black">{RoomName}</div>
-
+          <div className="flex flex-col h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+            <header className="bg-white bg-opacity-10 backdrop-blur-lg text-white p-4 flex justify-between items-center shadow-md">
+              <div className="flex items-center gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="text-white hover:text-blue-300 transition-colors duration-200"
+                  onClick={() => { router.push('/'); }}
+                >
+                  <FaArrowLeft size={20} />
+                </motion.button>
+                <h2 className="text-xl font-semibold">{RoomName}</h2>
               </div>
-
-              <div
-                className="pr-10 text-2xl cursor-pointer text-black"
-                onClick={() => {
-                  setShowSubmitAIMessage(!showSubmitAIMessage);
-                }}
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="text-2xl cursor-pointer text-white hover:text-blue-300 transition-colors duration-200"
+                onClick={() => { setShowSubmitAIMessage(!showSubmitAIMessage); }}
               >
                 <FaRobot />
-              </div>
-
-
+              </motion.div>
             </header>
-            <main className="flex-1 overflow-y-auto flex flex-col-reverse bg-white p-4">
-              {showSubmitAIMessage ? (
+            
+            <main className="flex-1 overflow-y-auto bg-white bg-opacity-10 backdrop-blur-md p-4">
+              {showSubmitAIMessage && (
                 <>
                   <div
-                    className={`${style.backdrop} h-full w-full`}
-                    onClick={() => {
-                      setShowSubmitAIMessage(false);
-                    }}
+                    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+                    onClick={() => { setShowSubmitAIMessage(false); }}
                   ></div>
                   <SubmitAIMessage
                     currentRoom={currentRoom}
@@ -122,33 +122,30 @@ const ChatRoom = () => {
                     setShowSubmitAIMessage={setShowSubmitAIMessage}
                   />
                 </>
-              ) : (
-                ""
               )}
-
               <ChatWindow messages={messages} />
             </main>
-            <footer className="p-4 flex items-center">
-              <input
-                className="flex-1 p-2 border border-gray-400 rounded focus:outline-none"
-                style={{
-                  background: "none",
-                  resize: "none",
-                  minHeight: "40px",
-                }}
-                placeholder="Type your message..."
-                value={messageInput}
-                onChange={handleInputChange}
-                onKeyPress={handleKeyPress}
-              />
-              <button
-                className="ml-2 px-4 py-2 bg-black text-white rounded-lg"
-                onClick={handleSubmit}
-              >
-                <IoSend />
-              </button>
+
+            <footer className="p-4 bg-white bg-opacity-10 backdrop-blur-lg">
+              <div className="flex items-center bg-white bg-opacity-20 rounded-full overflow-hidden shadow-lg">
+                <input
+                  className="flex-1 p-3 bg-transparent text-white placeholder-gray-300 focus:outline-none"
+                  placeholder="Type your message..."
+                  value={messageInput}
+                  onChange={handleInputChange}
+                  onKeyPress={handleKeyPress}
+                />
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-4 py-2 bg-white text-purple-600 rounded-full mr-1"
+                  onClick={handleSubmit}
+                >
+                  <IoSend />
+                </motion.button>
+              </div>
             </footer>
-          </>
+          </div>
         )}
       </ChatLayout>
     </ProtectedRoute>

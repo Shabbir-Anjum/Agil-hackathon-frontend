@@ -3,9 +3,10 @@
 import ChatLayout from "@/components/ChatLayout";
 import React, { useState, useEffect } from "react";
 import { AiOutlineUserAdd } from 'react-icons/ai';
+import { FaArrowLeft, FaUserFriends, FaCompass } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import {FaArrowLeft } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const Page = () => {
   const [name, setName] = useState('');
@@ -16,9 +17,7 @@ const Page = () => {
   const email = userdata.email;
   const router = useRouter();
 
-
   useEffect(() => {
-   
   }, [friends]);
 
   const handleAddFriend = () => {
@@ -37,10 +36,10 @@ const Page = () => {
       const response = await addOuting();
       setName('');
       setFriends({});
+      router.push('/chat');
     } catch (error) {
       console.error('Error creating outing:', error);
     }
-router.push('/chat')
   };
 
   const addOuting = async () => {
@@ -70,60 +69,98 @@ router.push('/chat')
 
   return (
     <ChatLayout>
-         <button
-                className=" text-black hover:text-blue-700 bg-slate-200 "
-                onClick={()=>{router.push('/chat');}}
-              >
-                <FaArrowLeft size={20} className="ml-8 mt-3" />
-              </button>
-    <div className="flex items-center justify-center bg-slate-200 h-screen p-10">
-      <div className="bg-white p-10 rounded-lg shadow-md w-full max-w-lg">
-        <h1 className="text-2xl font-bold mb-6">Create a new Outing Group</h1>
-
-        <input
-          className="w-full p-3 border border-gray-300 rounded-md mb-4"
-          type="text"
-          placeholder="Enter the name of the outing"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-
-        <div className="relative flex mb-4">
-          <input
-            className="w-full p-3 border border-gray-300 rounded-md mr-2"
-            type="text"
-            placeholder="Enter Email of your friends"
-            value={friendInput}
-            onChange={(e) => setFriendInput(e.target.value)}
-          />
-          <button
-            className="bg-black text-white p-3 rounded-md hover:bg-green-600"
-            onClick={handleAddFriend}
-          >
-            <AiOutlineUserAdd size={24} />
-          </button>
-        </div>
-
-        {Object.keys(friends).length > 0 && (
-          <div className="mt-4">
-            <h2 className="text-lg font-semibold mb-2">Selected Friends:</h2>
-            <ul className="list-disc list-inside">
-              {Object.entries(friends).map(([key, email]) => (
-                <li key={key}>{email}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <button
-          className="w-full bg-black text-white p-3 rounded-md hover:bg-green-600 mt-6"
-          onClick={handleSubmit}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 p-6"
+      >
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="text-white hover:text-blue-200 mb-6"
+          onClick={() => { router.push('/chat'); }}
         >
-          Create
-        </button>
-      </div>
-    </div>
-  </ChatLayout>
+          <FaArrowLeft size={24} />
+        </motion.button>
+
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="bg-white p-8 rounded-lg shadow-xl max-w-2xl mx-auto"
+        >
+          <h1 className="text-3xl font-bold mb-6 text-gray-800 flex items-center">
+            <FaCompass className="mr-3 text-blue-500" />
+            Create a new Outing Group
+          </h1>
+
+          <motion.input
+            whileFocus={{ scale: 1.02 }}
+            className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            type="text"
+            placeholder="Enter the name of the outing"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+          <div className="relative flex mb-4">
+            <motion.input
+              whileFocus={{ scale: 1.02 }}
+              className="w-full p-3 border border-gray-300 rounded-md mr-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              type="text"
+              placeholder="Enter Email of your friends"
+              value={friendInput}
+              onChange={(e) => setFriendInput(e.target.value)}
+            />
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-300"
+              onClick={handleAddFriend}
+            >
+              <AiOutlineUserAdd size={24} />
+            </motion.button>
+          </div>
+
+          {Object.keys(friends).length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mt-4 bg-gray-100 p-4 rounded-md"
+            >
+              <h2 className="text-lg font-semibold mb-2 flex items-center">
+                <FaUserFriends className="mr-2 text-blue-500" />
+                Selected Friends:
+              </h2>
+              <ul className="list-disc list-inside">
+                {Object.entries(friends).map(([key, email]) => (
+                  <motion.li
+                    key={key}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-gray-700"
+                  >
+                    {email}
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full bg-green-500 text-white p-3 rounded-md hover:bg-green-600 mt-6 transition duration-300 font-semibold"
+            onClick={handleSubmit}
+          >
+            Create Outing
+          </motion.button>
+        </motion.div>
+      </motion.div>
+    </ChatLayout>
   );
 };
 

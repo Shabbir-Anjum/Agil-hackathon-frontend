@@ -8,7 +8,7 @@ const initialState = {
   RoomName:'',
   socketId: "",
   user: null,
-  server_url: "https://teepon.onrender.com",
+  server_url: "https://teepon-backend.onrender.com",
   userdata:null
 };
 

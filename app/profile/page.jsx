@@ -1,86 +1,115 @@
 'use client';
-import React, { useState } from 'react'; // Import useState for state management
-import { MdKeyboardArrowLeft } from 'react-icons/md'; // Import React icons
-import { useRouter } from 'next/navigation'; // Import useRouter for navigation
-import CustomInput from '@/components/common/CustomInput'; // Import your custom input component
-import { FaUserEdit } from "react-icons/fa";
-import { FaSave } from "react-icons/fa";
-import { useSelector} from 'react-redux';
+
+import React, { useState } from 'react';
+import { MdKeyboardArrowLeft } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
+import CustomInput from '@/components/common/CustomInput';
+import { FaUserEdit, FaSave } from "react-icons/fa";
+import { useSelector } from 'react-redux';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import { motion } from 'framer-motion';
+
 const Profile = () => {
-  
   const router = useRouter();
-  const [editMode, setEditMode] = useState(false); // State for edit mode
-  const [name, setName] = useState(null); // Example name
- // const [userId, setUserId] = useState('ghostfreak123'); // Example user ID
-  const [email, setEmail] = useState(null); // Example email
-  const [link, setLink] = useState('https://example.com'); // Example link
-  const [bio, setBio] = useState('Frontend Developer'); // Example bio
+  const [editMode, setEditMode] = useState(false);
+  const [name, setName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [link, setLink] = useState('https://example.com');
+  const [bio, setBio] = useState('Frontend Developer');
+  
   const userdata = useSelector((state) => state.chat.userdata);
+  
   const handleEditToggle = () => {
     setEditMode(!editMode);
   };
+  
   const photoURL = userdata?.photoURL || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330';
-  const displayName = userdata?.displayName || 'name'
-  const Email = userdata?.email|| 'userid'
+  const displayName = userdata?.displayName || 'name';
+  const Email = userdata?.email || 'userid';
+  
   return (
     <ProtectedRoute>
-    <div className="min-h-screen bg-gray-200 flex items-center justify-center ">
-    <div className="max-w-md w-full bg-gray-200 shadow-lg rounded-lg overflow-hidden">
-      <div className="bg-cover bg-center h-40" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1494790108377-be9c29b29330")' }}>
-        <MdKeyboardArrowLeft
-          className="text-white text-3xl m-4 cursor-pointer"
-          onClick={() => router.back()}
-        />
-      </div>
-      <div className="p-6">
-        <div className="flex items-center">
-          <div className="flex-shrink-0 h-16 w-16 rounded-full bg-gray-200 overflow-hidden">
-            <img className="h-full w-full object-cover" src={photoURL} alt="User avatar" />
-          </div>
-          <div className="ml-4">
-            <h2 className="text-2xl font-bold text-gray-900">{displayName}</h2>
-            <p className="text-sm text-gray-600">@{Email}</p>
-          </div>
-          <button onClick={handleEditToggle} className="ml-auto text-gray-600 hover:text-gray-900">
-            {editMode ? <FaSave size={20} /> : <FaUserEdit size={20} />}
-          </button>
-        </div>
-        <div className="mt-6">
-          <CustomInput
-            label="Name"
-            value={name? name : displayName}
-            onChange={(e) => setName(e.target.value)}
-            disabled={!editMode}
-            inputType="text"
-          />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500"
+      >
+        <div className="container mx-auto px-4 py-8">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => router.back()}
+            className="mb-6 flex items-center text-white"
+          >
+            <MdKeyboardArrowLeft size={24} />
+            <span className="ml-2">Back</span>
+          </motion.button>
           
-          <CustomInput
-            label="Email"
-            value={email ? email : Email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={!editMode}
-            inputType="email"
-          />
-          <CustomInput
-            label="Link"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
-            disabled={!editMode}
-            inputType="text"
-          />
-          <CustomInput
-            label="Bio"
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            disabled={!editMode}
-            inputType="text"
-          />
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white rounded-lg shadow-xl p-8"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-3xl font-bold text-gray-800">Profile</h1>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={handleEditToggle}
+                className="bg-blue-500 text-white px-4 py-2 rounded-full flex items-center"
+              >
+                {editMode ? <FaSave className="mr-2" /> : <FaUserEdit className="mr-2" />}
+                {editMode ? 'Save' : 'Edit'}
+              </motion.button>
+            </div>
+            
+            <div className="flex flex-col md:flex-row">
+              <motion.img
+                whileHover={{ scale: 1.05 }}
+                src={photoURL}
+                alt="Profile"
+                className="w-32 h-32 rounded-full mb-4 md:mb-0 md:mr-8"
+              />
+              <div className="flex-grow">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-2">{displayName}</h2>
+                <p className="text-gray-600 mb-4">@{Email}</p>
+                
+                <CustomInput
+                  label="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  disabled={!editMode}
+                  inputType="text"
+                />
+                <CustomInput
+                  label="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={!editMode}
+                  inputType="email"
+                />
+                <CustomInput
+                  label="Website"
+                  value={link}
+                  onChange={(e) => setLink(e.target.value)}
+                  disabled={!editMode}
+                  inputType="text"
+                />
+                <CustomInput
+                  label="Bio"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  disabled={!editMode}
+                  inputType="text"
+                />
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </div>
-    </div>
-  </div>
-  </ProtectedRoute>
+      </motion.div>
+    </ProtectedRoute>
   );
 };
 
