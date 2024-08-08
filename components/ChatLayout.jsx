@@ -12,7 +12,7 @@ const ChatLayout = ({ children }) => {
   return (
     <section className="h-screen flex relative">
       {/* Hamburger Menu (only visible on small screens) */}
-      <div className={`absolute top-4 left-12 text-3xl cursor-pointer md:hidden z-10 ${hamburg ? 'hidden' : 'block'}`} onClick={toggleHamburg}>
+      <div className={`absolute top-4 left-2 text-white text-3xl cursor-pointer md:hidden z-10 ${hamburg ? 'hidden' : 'block'}`} onClick={toggleHamburg}>
         <IoMdMenu />
       </div>
       

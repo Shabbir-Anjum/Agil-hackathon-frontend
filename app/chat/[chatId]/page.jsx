@@ -11,10 +11,12 @@ import {
 } from "@/services/socketService";
 import { setCurrentMessages, setCurrentRoom } from "@/store/ChatSlice";
 import { IoSend } from "react-icons/io5";
+import { FaArrowLeft } from "react-icons/fa";
+import { RiRobotFill } from "react-icons/ri"; // Changed to a more modern robot icon
+import { GiHamburgerMenu } from "react-icons/gi";
 import ChatWindow from "@/components/ChatWindow";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ChatLayout from "@/components/ChatLayout";
-import { FaRobot, FaArrowLeft } from "react-icons/fa";
 import SubmitAIMessage from "@/components/SubmitAIMessage";
 import { motion } from 'framer-motion';
 
@@ -28,8 +30,6 @@ const ChatRoom = () => {
   const dispatch = useDispatch();
   const currentuser = useSelector((state) => state.chat.user);
   const serverUrl = useSelector((state) => state.chat.server_url);
-
-  // ... (keep all the existing useEffect and handler functions)
 
   useEffect(() => {
     connectSocket();
@@ -91,7 +91,15 @@ const ChatRoom = () => {
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  className="text-white hover:text-blue-300 transition-colors duration-200"
+                  className="text-white hover:text-blue-300 transition-colors duration-200 md:hidden"
+                  onClick={() => { /* Toggle sidebar */ }}
+                >
+                  <GiHamburgerMenu size={24} />
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="text-white hover:text-blue-300 transition-colors duration-200 hidden md:block"
                   onClick={() => { router.push('/'); }}
                 >
                   <FaArrowLeft size={20} />
@@ -101,29 +109,39 @@ const ChatRoom = () => {
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="text-2xl cursor-pointer text-white hover:text-blue-300 transition-colors duration-200"
+                className="flex items-center gap-2 cursor-pointer text-white hover:text-blue-300 transition-colors duration-200"
                 onClick={() => { setShowSubmitAIMessage(!showSubmitAIMessage); }}
               >
-                <FaRobot />
+                <RiRobotFill size={28} />
+                <span className="hidden md:inline">Get AI Recommendations</span>
               </motion.div>
             </header>
             
-            <main className="flex-1 overflow-y-auto bg-white bg-opacity-10 backdrop-blur-md p-4">
+            <main className="flex-1 overflow-y-auto bg-white bg-opacity-10 backdrop-blur-md p-4 relative">
               {showSubmitAIMessage && (
-                <>
-                  <div
-                    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
-                    onClick={() => { setShowSubmitAIMessage(false); }}
-                  ></div>
-                  <SubmitAIMessage
-                    currentRoom={currentRoom}
-                    currentuser={currentuser}
-                    serverUrl={serverUrl}
-                    setShowSubmitAIMessage={setShowSubmitAIMessage}
-                  />
-                </>
+                <SubmitAIMessage
+                  currentRoom={currentRoom}
+                  currentuser={currentuser}
+                  serverUrl={serverUrl}
+                  setShowSubmitAIMessage={setShowSubmitAIMessage}
+                />
               )}
               <ChatWindow messages={messages} />
+              
+              {!showSubmitAIMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-90 rounded-full px-4 py-2 shadow-lg cursor-pointer"
+                  onClick={() => setShowSubmitAIMessage(true)}
+                >
+                  <div className="flex items-center gap-2 text-purple-600">
+                    <RiRobotFill size={20} />
+                    <span className="text-sm font-medium">Ask AI for outing ideas</span>
+                  </div>
+                </motion.div>
+              )}
             </main>
 
             <footer className="p-4 bg-white bg-opacity-10 backdrop-blur-lg">

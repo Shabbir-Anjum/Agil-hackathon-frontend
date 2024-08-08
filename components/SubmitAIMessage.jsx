@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { sendAiMessage } from "@/API/Api";
 import toast, { Toaster } from 'react-hot-toast';
-import Recommendation from "@/components/Recommendation/Recommendation"; // Import Recommendation component
+import Recommendation from "@/components/Recommendation/Recommendation";
+import { IoMdClose } from "react-icons/io"; 
 
 const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIMessage }) => {
   const [outing_topic, setOutingName] = useState("");
   const [location, setAddress] = useState("");
-  const [showRecommendation, setShowRecommendation] = useState(false); // State to toggle recommendation
-  const[AiResponse,setAiResponse]= useState(null)
+  const [showRecommendation, setShowRecommendation] = useState(false);
+  const [AiResponse, setAiResponse] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -19,42 +22,76 @@ const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIM
       });
       setOutingName("");
       setAddress("");
-      setAiResponse(response)
-      toast.success("Recieved recommendation successfully!");
-      setShowRecommendation(true); // Show recommendation after submitting AI message
+      setAiResponse(response);
+      toast.success("Received recommendation successfully!");
+      setShowRecommendation(true);
     } catch (error) {
       console.error("Error submitting AI message:", error);
       toast.error("Error submitting AI message.");
     }
   };
 
+  const handleClose = () => {
+    setShowSubmitAIMessage(false);
+  };
+
   return (
-    <div className="w-11/12 max-w-lg h-96 bg-white absolute z-50 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg p-4 flex flex-col">
-      <form onSubmit={handleSubmit} className="space-y-4 mx-auto py-24">
-        <input
-          type="text"
-          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          placeholder="Enter outing name"
-          value={outing_topic}
-          onChange={(e) => setOutingName(e.target.value)}
-        />
-        <input
-          type="text"
-          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          placeholder="Enter address (City, Country)"
-          value={location}
-          onChange={(e) => setAddress(e.target.value)}
-        />
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+    >
+      <div className="w-full max-w-md bg-white rounded-lg shadow-xl overflow-hidden relative">
         <button
-          type="submit"
-          className="w-full p-2 bg-black text-white rounded hover:bg-green-600"
+          onClick={handleClose}
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
         >
-          Submit
+          <IoMdClose size={24} />
         </button>
-      </form>
-      {showRecommendation && <Recommendation AiResponse={AiResponse} />} {/* Show recommendation when state is true */}
-      <Toaster position="top-left" />
-    </div>
+        <div className="p-6 space-y-6">
+          <h2 className="text-2xl font-bold text-gray-800 text-center">Plan Your Outing</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+          <motion.div
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <input
+                type="text"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+                placeholder="Enter outing name"
+                value={outing_topic}
+                onChange={(e) => setOutingName(e.target.value)}
+              />
+            </motion.div>
+            <motion.div
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <input
+                type="text"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+                placeholder="Enter address (City, Country)"
+                value={location}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </motion.div>
+            <motion.button
+              type="submit"
+              className="w-full p-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Get Recommendations
+            </motion.button>
+          </form>
+        </div>
+        {showRecommendation && <Recommendation AiResponse={AiResponse} />}
+      </div>
+      <Toaster position="top-right" />
+    </motion.div>
   );
 };
 
