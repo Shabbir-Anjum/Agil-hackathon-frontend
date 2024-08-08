@@ -44,14 +44,14 @@ const SignIn = () => {
         const refreshToken = res.user.refreshToken;
         const name = res.user.displayName;
         const email = res.user.email;
-
+        router.push('/');
         await sendUserDetailsToBackend(name, email, accessToken, refreshToken);
 
         sessionStorage.setItem('user', 'true');
         sessionStorage.setItem('accessToken', accessToken);
         sessionStorage.setItem('refreshToken', refreshToken);
         
-        router.push('/');
+       
       }
     } catch (e) {
       console.error('Google sign-in error:', e);
