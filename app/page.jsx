@@ -57,6 +57,7 @@ const Home = () => {
       toast.error('Failed to authorize Google Calendar');
     } else {
       try {
+        
         setAccessToken(response.access_token);
         console.log(accessToken)
         setRefreshToken(response.refresh_token);
