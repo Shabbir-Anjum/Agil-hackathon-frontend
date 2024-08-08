@@ -27,7 +27,7 @@ const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIM
       setShowRecommendation(true);
     } catch (error) {
       console.error("Error submitting AI message:", error);
-      toast.error("Error submitting AI message.");
+      toast.error("Only the outing creator can send a request.");
     }
   };
 

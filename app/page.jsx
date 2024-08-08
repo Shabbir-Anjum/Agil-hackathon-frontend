@@ -5,14 +5,13 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/services/firebase/config';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { FiMenu, FiX, FiCalendar, FiMessageCircle, FiUser, FiLogOut, FiMap, FiUsers, FiStar } from 'react-icons/fi';
+import { FiMenu, FiX, FiCalendar, FiMessageCircle, FiUser, FiLogOut, FiMap, FiUsers, FiStar, FiPlus } from 'react-icons/fi';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useSelector } from "react-redux";
 import { motion } from 'framer-motion';
 
-const CLIENT_ID = '499631111911-2lqqlv2vn74ftmgmml5j5isnkf2v8k95.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
 
 const Home = () => {
@@ -22,15 +21,40 @@ const Home = () => {
   const [accessToken, setAccessToken] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
   const [tokenClient, setTokenClient] = useState(null);
+  const [calendarColor, setCalendarColor] = useState('bg-red-600');
+  const [lastAuthTime, setLastAuthTime] = useState(null);
+
   const serverUrl = useSelector((state) => state.chat.server_url);
   const currentuser = useSelector((state) => state.chat.user);
-
 
   useEffect(() => {
     if (user) {
       loadGoogleAuthScript();
+      const storedAuthTime = localStorage.getItem('lastAuthTime');
+      const storedColor = localStorage.getItem('calendarColor');
+      if (storedAuthTime && storedColor) {
+        const timeDiff = Date.now() - parseInt(storedAuthTime);
+        if (timeDiff < 55 * 60 * 1000) {
+          setCalendarColor(storedColor);
+          setLastAuthTime(parseInt(storedAuthTime));
+        } else {
+          setCalendarColor('bg-red-600');
+          localStorage.setItem('calendarColor', 'bg-red-600');
+        }
+      }
     }
   }, [user]);
+
+  useEffect(() => {
+    if (lastAuthTime) {
+      const timer = setTimeout(() => {
+        setCalendarColor('bg-red-600');
+        localStorage.setItem('calendarColor', 'bg-red-600');
+      }, 55 * 60 * 1000 - (Date.now() - lastAuthTime));
+
+      return () => clearTimeout(timer);
+    }
+  }, [lastAuthTime]);
 
   const loadGoogleAuthScript = () => {
     const script = document.createElement('script');
@@ -41,13 +65,11 @@ const Home = () => {
 
   const initializeGoogleAuth = () => {
     const client = window.google.accounts.oauth2.initTokenClient({
-      client_id: CLIENT_ID,
+      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
       scope: SCOPES,
       callback: handleAuthResponse,
     });
     setTokenClient(client);
-    
-
   };
 
   const handleAuthResponse = async (response) => {
@@ -57,16 +79,18 @@ const Home = () => {
     } else {
       try {
         setAccessToken(response.access_token);
-        console.log(accessToken)
         setRefreshToken(response.refresh_token);
         toast.success('Google Calendar authorized successfully!', {
           autoClose: 3000,
         });
-        await sendtoken(currentuser, accessToken); 
-       
+        setCalendarColor('bg-green-600');
+        const currentTime = Date.now();
+        setLastAuthTime(currentTime);
+        localStorage.setItem('calendarColor', 'bg-green-600');
+        localStorage.setItem('lastAuthTime', currentTime.toString());
+        await sendtoken(currentuser, response.access_token);
       } catch (error) {
         console.error('Failed to send token:', error);
-      
       }
     }
   };
@@ -172,19 +196,20 @@ const Home = () => {
               <h2 className="text-5xl font-bold mb-6 text-blue-300">Discover Amazing Adventures with Friends</h2>
               <p className="text-xl mb-8">Plan unforgettable outings and create lasting memories together.</p>
               <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <motion.button 
+              <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => router.push('/chat/new')} 
-                  className="px-8 py-3 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 transition-colors"
+                  className="px-8 py-3 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 transition-colors flex items-center"
                 >
+                  <FiPlus className="mr-2" />
                   Create Outing
                 </motion.button>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleGoogleAuthClick} 
-                  className="px-8 py-3 bg-green-600 text-white font-bold rounded-full hover:bg-green-700 transition-colors flex items-center"
+                  className={`px-8 py-3 ${calendarColor} text-white font-bold rounded-full hover:bg-green-700 transition-colors flex items-center`}
                 >
                   <FiCalendar className="mr-2" />
                   Authorize Google Calendar

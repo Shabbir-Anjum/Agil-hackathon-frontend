@@ -3,8 +3,7 @@ import Sidebar from '@/components/Sidebar/Sidebar';
 import { IoMdMenu, IoMdClose } from 'react-icons/io';
 
 const ChatLayout = ({ children }) => {
-  const [hamburg, setHamburg] = useState(false); // Initially hide sidebar
-
+  const [hamburg, setHamburg] = useState(false); 
   const toggleHamburg = () => {
     setHamburg(!hamburg);
   };

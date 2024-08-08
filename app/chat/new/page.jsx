@@ -78,7 +78,7 @@ const Page = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="text-white hover:text-blue-200 mb-6"
+          className="text-white hover:text-blue-200 pl-6 mb-6"
           onClick={() => { router.push('/chat'); }}
         >
           <FaArrowLeft size={24} />
