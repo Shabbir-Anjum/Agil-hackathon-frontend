@@ -133,7 +133,7 @@ const ChatRoom = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className=" bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-90 rounded-full px-4 py-2 mx-auto shadow-lg w-[70%]  lg:w-[25%] cursor-pointer"
+                  className=" fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-90 rounded-full px-4 py-2 shadow-lg cursor-pointer z-10"
                   onClick={() => setShowSubmitAIMessage(true)}
                 >
                   <div className="flex items-center gap-2 text-purple-600">
