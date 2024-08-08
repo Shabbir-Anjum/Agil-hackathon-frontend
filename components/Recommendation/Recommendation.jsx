@@ -5,11 +5,11 @@ const Recommendation = ({ AiResponse }) => {
   const { dates, location } = AiResponse;
 
   return (
-    <motion.div
+     <motion.div
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className="bg-gray-100 p-6 max-h-64 overflow-y-auto"
+      className="bg-gray-100 p-6 max-h-64 overflow-y-auto mt-4"
     >
       <h3 className="text-xl font-bold mb-4 text-gray-800">Recommended Outings</h3>
       {dates.map((item, index) => (
