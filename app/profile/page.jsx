@@ -78,14 +78,14 @@ const Profile = () => {
                 
                 <CustomInput
                   label="Name"
-                  value={name}
+                  value={name? name : displayName}
                   onChange={(e) => setName(e.target.value)}
                   disabled={!editMode}
                   inputType="text"
                 />
                 <CustomInput
                   label="Email"
-                  value={email}
+                  value={email ? email : Email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={!editMode}
                   inputType="email"
