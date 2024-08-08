@@ -21,17 +21,40 @@ const Home = () => {
   const [accessToken, setAccessToken] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
   const [tokenClient, setTokenClient] = useState(null);
-  const [calendarColor, setCalendarColor] = useState('bg-red-600' || CalenderColor);
+  const [calendarColor, setCalendarColor] = useState('bg-red-600');
+  const [lastAuthTime, setLastAuthTime] = useState(null);
 
   const serverUrl = useSelector((state) => state.chat.server_url);
   const currentuser = useSelector((state) => state.chat.user);
-
+  
   useEffect(() => {
     if (user) {
       loadGoogleAuthScript();
+      const storedAuthTime = localStorage.getItem('lastAuthTime');
+      const storedColor = localStorage.getItem('calendarColor');
+      if (storedAuthTime && storedColor) {
+        const timeDiff = Date.now() - parseInt(storedAuthTime);
+        if (timeDiff < 55 * 60 * 1000) {
+          setCalendarColor(storedColor);
+          setLastAuthTime(parseInt(storedAuthTime));
+        } else {
+          setCalendarColor('bg-red-600');
+          localStorage.setItem('calendarColor', 'bg-red-600');
+        }
+      }
     }
   }, [user]);
 
+  useEffect(() => {
+    if (lastAuthTime) {
+      const timer = setTimeout(() => {
+        setCalendarColor('bg-red-600');
+        localStorage.setItem('calendarColor', 'bg-red-600');
+      }, 55 * 60 * 1000 - (Date.now() - lastAuthTime));
+
+      return () => clearTimeout(timer);
+    }
+  }, [lastAuthTime]);
 
   const loadGoogleAuthScript = () => {
     const script = document.createElement('script');
@@ -47,8 +70,6 @@ const Home = () => {
       callback: handleAuthResponse,
     });
     setTokenClient(client);
-    
-
   };
 
   const handleAuthResponse = async (response) => {
@@ -57,27 +78,19 @@ const Home = () => {
       toast.error('Failed to authorize Google Calendar');
     } else {
       try {
-        
         setAccessToken(response.access_token);
-        console.log(accessToken)
         setRefreshToken(response.refresh_token);
         toast.success('Google Calendar authorized successfully!', {
           autoClose: 3000,
         });
-        setCalendarColor('bg-green-600')
-        localStorage.setItem('CalenderColor', 'bg-green-600');
-        await sendtoken(currentuser, accessToken); 
-        const timer = setTimeout(() => {
-
-          setCalendarColor('bg-red-600')
-          localStorage.setItem('CalenderColor', 'bg-red-600');
-        }, 5000);
-    
-      
-        return () => clearTimeout(timer);
+        setCalendarColor('bg-green-600');
+        const currentTime = Date.now();
+        setLastAuthTime(currentTime);
+        localStorage.setItem('calendarColor', 'bg-green-600');
+        localStorage.setItem('lastAuthTime', currentTime.toString());
+        await sendtoken(currentuser, response.access_token);
       } catch (error) {
         console.error('Failed to send token:', error);
-      
       }
     }
   };
