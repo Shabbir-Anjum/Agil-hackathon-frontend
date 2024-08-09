@@ -78,6 +78,7 @@ const Home = () => {
     } else {
       try {
         const accessToken = response.access_token
+        console.log(accessToken)
         setRefreshToken(response.refresh_token);
         toast.success('Google Calendar authorized successfully!', {
           autoClose: 3000,
