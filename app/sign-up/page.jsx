@@ -50,7 +50,7 @@ const SignUp = () => {
       const refreshToken = res.user.uid;
       const accessToken= res.user.uid;
       const name= username
-      dispatch(setname(name))
+      dispatch(setname(username))
       sessionStorage.setItem('user', true);
       dispatch(setUser(email));
       dispatch(setUserdata(res));
@@ -92,7 +92,7 @@ const SignUp = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('User added:', data);
+        console.log('User added');
       } else {
         console.error('Failed to add user:', response.statusText);
       }

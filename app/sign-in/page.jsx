@@ -7,14 +7,14 @@ import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { useSelector } from "react-redux";
-
+import { useDispatch } from 'react-redux';
+import { setUser, setUserdata,setname } from '@/store/ChatSlice';
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
   const router = useRouter();
-  const serverUrl = useSelector((state) => state.chat.server_url);
+  const dispatch = useDispatch();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -23,9 +23,18 @@ const SignIn = () => {
       if (res) {
         sessionStorage.setItem('user', 'true');
         router.push('/');
+        
+        const email= res.user.email;
+        const parts = email.split('@');
+        const name= parts[0]
+        console.log(res, 'and', parts, 'and ', email, 'and', name)
+        dispatch(setname(name))
+        sessionStorage.setItem('user', true);
+        dispatch(setUser(email));
+        dispatch(setUserdata(res));
       }
     } catch (e) {
-      console.error('Sign-in error:', e);
+      console.error('Sign-in error:',);
     }
   };
 

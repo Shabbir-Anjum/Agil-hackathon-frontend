@@ -50,7 +50,6 @@ const chatSlice = createSlice({
     },
     setname: (state, action) => {
       state.name = action.payload;
-     
     },
   },
 });
