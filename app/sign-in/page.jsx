@@ -27,9 +27,7 @@ const SignIn = () => {
         const email= res.user.email;
         const parts = email.split('@');
         const name= parts[0]
-        console.log(res, 'and', parts, 'and ', email, 'and', name)
         dispatch(setname(name))
-        sessionStorage.setItem('user', true);
         dispatch(setUser(email));
         dispatch(setUserdata(res));
       }

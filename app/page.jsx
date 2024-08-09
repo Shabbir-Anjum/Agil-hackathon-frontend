@@ -23,7 +23,6 @@ const Home = () => {
   const [calendarColor, setCalendarColor] = useState('bg-red-600');
   const [lastAuthTime, setLastAuthTime] = useState(null);
 
-  const serverUrl = useSelector((state) => state.chat.server_url);
   const currentuser = useSelector((state) => state.chat.user);
   
   useEffect(() => {

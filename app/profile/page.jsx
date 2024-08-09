@@ -23,11 +23,11 @@ const Profile = () => {
   const handleEditToggle = () => {
     setEditMode(!editMode);
   };
-  
-  const photoURL = userdata?.photoURL || 'https://img.freepik.com/free-psd/abstract-background-design_1297-75.jpg?w=1060&t=st=1723186219~exp=1723186819~hmac=788b74d69097f6551006599dae26ad0dc3d51a2845e9f452e3f926b2f229286a';
+  console.log(userdata)
+  const photoURL = userdata?.photoURL   || 'https://img.freepik.com/free-psd/abstract-background-design_1297-75.jpg?w=1060&t=st=1723186219~exp=1723186819~hmac=788b74d69097f6551006599dae26ad0dc3d51a2845e9f452e3f926b2f229286a';
   const displayName = userdata?.displayName || names;
   const Email = user
-  console.log(names)
+  
   return (
     <ProtectedRoute>
       <motion.div
