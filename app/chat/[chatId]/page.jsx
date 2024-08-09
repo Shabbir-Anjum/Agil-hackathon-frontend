@@ -56,7 +56,7 @@ const ChatRoom = () => {
     const datetime = new Date().toGMTString();
     sendMessage(messageInput, currentRoom, currentuser, datetime);
 
-    fetch(`${serverUrl}/api/get-outings/${currentRoom}/chat/send`, {
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/get-outings/${currentRoom}/chat/send`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

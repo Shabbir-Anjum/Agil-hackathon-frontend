@@ -13,7 +13,7 @@ const Page = () => {
   const [friendInput, setFriendInput] = useState('');
   const [friends, setFriends] = useState({});
   const userdata = useSelector((state) => state.chat.userdata);
-  const serverUrl = useSelector((state) => state.chat.server_url);
+
   const email = userdata.email;
   const router = useRouter();
 
@@ -44,7 +44,7 @@ const Page = () => {
 
   const addOuting = async () => {
     try {
-      const response = await fetch(`${serverUrl}/api/add-outing`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/add-outing`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
