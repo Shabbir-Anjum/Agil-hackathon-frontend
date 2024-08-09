@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation'; // Correct hook for App Router
+import { useRouter } from 'next/navigation'; 
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from './Loader';

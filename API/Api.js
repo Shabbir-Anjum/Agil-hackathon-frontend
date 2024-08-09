@@ -10,10 +10,10 @@ const handleFetchErrors = (response) => {
 };
 
 // Function to add a new outing
-const addOuting = async (serverUrl,outingData) => {
+const addOuting = async (outingData) => {
  
   try {
-    const response = await fetch(`${serverUrl}/api/add-outing`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/add-outing`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ const addOuting = async (serverUrl,outingData) => {
 const addUser = async (userData) => {
 
   try {
-    const response = await fetch(`${serverUrl}/api/add-user`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/add-user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ const getFriends = async (serverUrl) => {
 const getOuting = async (outingId) => {
 
   try {
-    const response = await fetch(`${serverUrl}/api/get-outing/${outingId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/get-outing/${outingId}`, {
       method: 'GET',
     });
     return handleFetchErrors(response);
@@ -125,10 +125,10 @@ const getOuting = async (outingId) => {
 };
 
 // Function to get the list of all outings
-const listOutings = async (serverUrl,email) => {
+const listOutings = async (email) => {
 
   try {
-    const response = await fetch(`${serverUrl}/api/get-outings`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/get-outings`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -162,10 +162,10 @@ const updateMe = async (userData) => {
 };
 
 // Function to send a message
-const SendMessage = async (messageData,currentRoom,serverUrl) => {
+const SendMessage = async (messageData,currentRoom) => {
 
   try {
-    const response = await fetch(`${serverUrl}/api/get-outings/${currentRoom}/chat/send`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/get-outings/${currentRoom}/chat/send`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -217,10 +217,10 @@ const updateFriend = async (friendId, friendData) => {
 };
 
 // Function to get AI messages for a specific outing
-const getAiMessages = async (serverUrl,outingId) => {
+const getAiMessages = async (outingId) => {
 
   try {
-    const response = await fetch(`${serverUrl}/api/get-outing/${outingId}/ai-messages`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/get-outing/${outingId}/ai-messages`, {
       method: 'GET',
       headers: {
         'User-Agent': 'insomnia/9.2.0', // Specify user agent if needed
@@ -234,10 +234,10 @@ const getAiMessages = async (serverUrl,outingId) => {
 };
 
 // Function to send a message to AI for a specific outing
-const sendAiMessage = async (serverUrl,currentRoom, messageData) => {
+const sendAiMessage = async (currentRoom, messageData) => {
 
   try {
-    const response = await fetch(`${serverUrl}/api/get-outings/${currentRoom}/ai-chat/send`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/get-outings/${currentRoom}/ai-chat/send`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -252,9 +252,9 @@ const sendAiMessage = async (serverUrl,currentRoom, messageData) => {
   }
 };
 
-const getMessages = async (serverUrl,currentRoom) => {
+const getMessages = async (currentRoom) => {
   try {
-    const response = await fetch(`${serverUrl}/api/get-outings/${currentRoom}/chat`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/get-outings/${currentRoom}/chat`, {
       method: 'GET',
       headers: {
         'User-Agent': 'insomnia/9.2.0'

@@ -15,7 +15,7 @@ const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIM
     e.preventDefault();
     
     try {
-      const response = await sendAiMessage(serverUrl, currentRoom, {
+      const response = await sendAiMessage(currentRoom, {
         outing_topic: outing_topic,
         location: location,
         send_from: currentuser,

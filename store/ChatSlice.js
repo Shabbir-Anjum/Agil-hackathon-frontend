@@ -8,8 +8,9 @@ const initialState = {
   RoomName:'',
   socketId: "",
   user: null,
-  server_url: "https://teepon-backend.onrender.com",
-  userdata:null
+  server_url: "A",
+  userdata:null,
+  name:null
 };
 
 const chatSlice = createSlice({
@@ -47,10 +48,14 @@ const chatSlice = createSlice({
       state.userdata = action.payload;
      
     },
+    setname: (state, action) => {
+      state.name = action.payload;
+     
+    },
   },
 });
 
-export const { addMessage,setUserdata, setCurrentRoom, setSocketId, setUser, clearUser, setCurrentMessages, server_url,setRoomName } =
+export const { addMessage,setUserdata, setCurrentRoom, setSocketId, setUser,setname, clearUser, setCurrentMessages, server_url,setRoomName } =
   chatSlice.actions;
 
 export default chatSlice.reducer;

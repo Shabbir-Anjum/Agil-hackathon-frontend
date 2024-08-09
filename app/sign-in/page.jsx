@@ -41,15 +41,14 @@ const SignIn = () => {
         }
         
         const accessToken = credential.accessToken;
-        const refreshToken = res.user.refreshToken;
+        const refreshToken = credential.idToken;
         const name = res.user.displayName;
         const email = res.user.email;
         router.push('/');
         await sendUserDetailsToBackend(name, email, accessToken, refreshToken);
 
         sessionStorage.setItem('user', 'true');
-        sessionStorage.setItem('accessToken', accessToken);
-        sessionStorage.setItem('refreshToken', refreshToken);
+
         
        
       }
@@ -60,7 +59,7 @@ const SignIn = () => {
 
   const sendUserDetailsToBackend = async (name, email, accessToken, refreshToken) => {
     try {
-      const response = await fetch(`${serverUrl}/api/add-user`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/add-user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

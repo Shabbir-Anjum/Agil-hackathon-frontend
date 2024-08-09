@@ -18,7 +18,6 @@ const Home = () => {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [accessToken, setAccessToken] = useState('');
   const [refreshToken, setRefreshToken] = useState('');
   const [tokenClient, setTokenClient] = useState(null);
   const [calendarColor, setCalendarColor] = useState('bg-red-600');
@@ -78,7 +77,7 @@ const Home = () => {
       toast.error('Failed to authorize Google Calendar');
     } else {
       try {
-        setAccessToken(response.access_token);
+        const accessToken = response.access_token
         setRefreshToken(response.refresh_token);
         toast.success('Google Calendar authorized successfully!', {
           autoClose: 3000,
@@ -88,7 +87,7 @@ const Home = () => {
         setLastAuthTime(currentTime);
         localStorage.setItem('calendarColor', 'bg-green-600');
         localStorage.setItem('lastAuthTime', currentTime.toString());
-        await sendtoken(currentuser, response.access_token);
+        await sendtoken(currentuser, accessToken);
       } catch (error) {
         console.error('Failed to send token:', error);
       }
@@ -118,7 +117,7 @@ const Home = () => {
 
   const sendtoken = async (currentuser, accessToken) => {
     try {
-      const res = await fetch(`${serverUrl}/api/me`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/me`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,6 +131,7 @@ const Home = () => {
 
       if (res.ok) {
         console.log('Token sent to backend');
+        
        
       } else {
         console.error('Failed to send token to backend:', res.statusText);

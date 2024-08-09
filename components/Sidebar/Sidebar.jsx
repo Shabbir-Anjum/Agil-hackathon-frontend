@@ -24,7 +24,7 @@ const Sidebar = ({ hamburg, setHamburg }) => {
 
   const handleRoomClick = async (currentRoom, RoomName) => {
     try {
-      const response = await getMessages(serverUrl, currentRoom); // Pass serverUrl as an argument
+      const response = await getMessages(currentRoom);
       dispatch(setCurrentMessages(response.messages));
       localStorage.setItem("chatMessages", JSON.stringify(response.messages));
       setHamburg(false);
@@ -47,7 +47,7 @@ const Sidebar = ({ hamburg, setHamburg }) => {
   useEffect(() => {
     const fetchUserOutings = async () => {
       try {
-        const data = await listOutings(serverUrl, userdata.email); // Use the getOutings function
+        const data = await listOutings(userdata.email); // Use the getOutings function
         setOutings(data.outings);
 
 
@@ -63,9 +63,8 @@ const Sidebar = ({ hamburg, setHamburg }) => {
     }
   }, [userdata, serverUrl]);
 
-  const photoURL = userdata?.photoURL || 'default-image-url.jpg';
+  const photoURL = userdata?.photoURL || 'https://img.freepik.com/free-psd/abstract-background-design_1297-75.jpg?w=1060&t=st=1723186219~exp=1723186819~hmac=788b74d69097f6551006599dae26ad0dc3d51a2845e9f452e3f926b2f229286a';
 
-  // ... (keep all the existing state and functions)
 
 
   return (

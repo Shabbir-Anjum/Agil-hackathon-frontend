@@ -6,7 +6,7 @@ export default function Loader() {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 overflow-hidden">
       <div className="relative">
-        {/* Pulsating background circle */}
+       
         <motion.div
           className="absolute inset-0 bg-white rounded-full opacity-20"
           animate={{

@@ -6,9 +6,9 @@ import { auth } from '@/services/firebase/config';
 import { useRouter } from 'next/navigation';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
-import { setUser } from '@/store/ChatSlice';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 
+import { setUser, setUserdata,setname } from '@/store/ChatSlice';
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,6 +19,8 @@ const SignUp = () => {
   const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const dispatch = useDispatch();
+
+
 
   const validateEmail = (email) => {
     return email.endsWith('@gmail.com');
@@ -45,15 +47,19 @@ const SignUp = () => {
     setError('');
     try {
       const res = await createUserWithEmailAndPassword(email, password);
-      console.log('from signup', { res });
-
+      const refreshToken = res.user.uid;
+      const accessToken= res.user.uid;
+      const name= username
+      dispatch(setname(name))
       sessionStorage.setItem('user', true);
-      dispatch(setUser(username));
+      dispatch(setUser(email));
+      dispatch(setUserdata(res));
       setEmail('');
       setPassword('');
       setConfirmPassword('');
       setUsername('');
       router.push('/');
+      await sendUserDetailsToBackend(name, email, accessToken, refreshToken);
     } catch (e) {
       if (e.code === 'auth/email-already-in-use') {
         setError('Email is already registered. Please enter another email.');
@@ -67,6 +73,34 @@ const SignUp = () => {
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
+
+
+  const sendUserDetailsToBackend = async (name, email, accessToken, refreshToken) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/add-user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          accessToken,
+          refreshToken
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('User added:', data);
+      } else {
+        console.error('Failed to add user:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error sending user details to backend:', error);
+    }
+  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-600">

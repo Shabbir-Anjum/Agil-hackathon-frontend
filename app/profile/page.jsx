@@ -18,14 +18,15 @@ const Profile = () => {
   const [bio, setBio] = useState('Frontend Developer');
   
   const userdata = useSelector((state) => state.chat.userdata);
-  
+  const user = useSelector((state) => state.chat.user);
+  const names= useSelector((state) => state.chat.name);
   const handleEditToggle = () => {
     setEditMode(!editMode);
   };
   
-  const photoURL = userdata?.photoURL || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330';
-  const displayName = userdata?.displayName || 'name';
-  const Email = userdata?.email || 'userid';
+  const photoURL = userdata?.photoURL || 'https://img.freepik.com/free-psd/abstract-background-design_1297-75.jpg?w=1060&t=st=1723186219~exp=1723186819~hmac=788b74d69097f6551006599dae26ad0dc3d51a2845e9f452e3f926b2f229286a';
+  const displayName = userdata?.displayName || names;
+  const Email = user
   
   return (
     <ProtectedRoute>
