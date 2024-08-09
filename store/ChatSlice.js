@@ -10,7 +10,8 @@ const initialState = {
   user: null,
   server_url: "A",
   userdata:null,
-  name:null
+  name:null,
+  token: null
 };
 
 const chatSlice = createSlice({
@@ -51,10 +52,16 @@ const chatSlice = createSlice({
     setname: (state, action) => {
       state.name = action.payload;
     },
+   
+    settoken: (state, action) => {
+      state.token = action.payload;
+      sessionStorage.setItem('accessToken', action.payload)
+      console.log('accessToken redux', action.payload)
+    },
   },
 });
 
-export const { addMessage,setUserdata, setCurrentRoom, setSocketId, setUser,setname, clearUser, setCurrentMessages, server_url,setRoomName } =
+export const { addMessage,setUserdata, settoken, setCurrentRoom, setSocketId, setUser,setname, clearUser, setCurrentMessages, server_url,setRoomName } =
   chatSlice.actions;
 
 export default chatSlice.reducer;

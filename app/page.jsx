@@ -9,10 +9,11 @@ import { FiMenu, FiX, FiCalendar, FiMessageCircle, FiUser, FiLogOut, FiMap, FiUs
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from 'framer-motion';
-
-const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
+import { FaArrowLeft } from "react-icons/fa";
+import { settoken } from '@/store/ChatSlice';
+const SCOPES = 'https://www.googleapis.com/auth/calendar.events';
 
 const Home = () => {
   const [user] = useAuthState(auth);
@@ -22,7 +23,7 @@ const Home = () => {
   const [tokenClient, setTokenClient] = useState(null);
   const [calendarColor, setCalendarColor] = useState('bg-red-600');
   const [lastAuthTime, setLastAuthTime] = useState(null);
-
+  const dispatch= useDispatch()
   const currentuser = useSelector((state) => state.chat.user);
   
   useEffect(() => {
@@ -77,7 +78,10 @@ const Home = () => {
     } else {
       try {
         const accessToken = response.access_token
+        sessionStorage.setItem('accessToken', accessToken)
+        dispatch(settoken(accessToken))
         console.log(accessToken)
+        
         setRefreshToken(response.refresh_token);
         toast.success('Google Calendar authorized successfully!', {
           autoClose: 3000,
@@ -130,7 +134,7 @@ const Home = () => {
       });
 
       if (res.ok) {
-        console.log('Token sent to backend');
+        console.log('Token sent to backend', accessToken);
         
        
       } else {
@@ -148,6 +152,7 @@ const Home = () => {
 
   return (
     <ProtectedRoute>
+      
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -266,6 +271,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
+        
           </footer>
           
           <ToastContainer position="bottom-right" />

@@ -88,19 +88,12 @@ const ChatRoom = () => {
           <div className="flex flex-col h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
             <header className="bg-white bg-opacity-10 backdrop-blur-lg text-white p-4 flex justify-between items-center shadow-md">
               <div className="flex items-center gap-4">
+
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  className="text-white hover:text-blue-300 transition-colors duration-200 md:hidden"
-                  onClick={() => { /* Toggle sidebar */ }}
-                >
-                  <GiHamburgerMenu size={24} />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="text-white hover:text-blue-300 transition-colors duration-200 hidden md:block"
-                  onClick={() => { router.push('/'); }}
+                  className="text-white hover:text-blue-300 transition-colors duration-200 ml-7 mt-1"
+                  onClick={() => { router.push('/chat'); }}
                 >
                   <FaArrowLeft size={20} />
                 </motion.button>
@@ -116,7 +109,7 @@ const ChatRoom = () => {
                 <span className="hidden md:inline">Get AI Recommendations</span>
               </motion.div>
             </header>
-            
+
             <main className="flex-1 overflow-y-auto bg-white bg-opacity-10 backdrop-blur-md p-4 relative">
               {showSubmitAIMessage && (
                 <SubmitAIMessage
@@ -127,7 +120,7 @@ const ChatRoom = () => {
                 />
               )}
               <ChatWindow messages={messages} />
-              
+
               {!showSubmitAIMessage && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}

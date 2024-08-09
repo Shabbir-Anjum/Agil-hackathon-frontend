@@ -4,16 +4,30 @@ import { sendAiMessage } from "@/API/Api";
 import toast, { Toaster } from 'react-hot-toast';
 import Recommendation from "@/components/Recommendation/Recommendation";
 import { IoMdClose } from "react-icons/io"; 
+const Loader = () => (
+  <motion.div
+    className="flex justify-center items-center h-24"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+  >
+    <motion.div
+      className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full"
+      animate={{ rotate: 360 }}
+      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+    />
+  </motion.div>
+);
 
 const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIMessage }) => {
   const [outing_topic, setOutingName] = useState("");
   const [location, setAddress] = useState("");
   const [showRecommendation, setShowRecommendation] = useState(false);
   const [AiResponse, setAiResponse] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setIsLoading(true);
     try {
       const response = await sendAiMessage(currentRoom, {
         outing_topic: outing_topic,
@@ -28,6 +42,9 @@ const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIM
     } catch (error) {
       console.error("Error submitting AI message:", error);
       toast.error("Only the outing creator can send a request.");
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -88,6 +105,7 @@ const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIM
             </motion.button>
           </form>
         </div>
+        {isLoading && <Loader />}
         {showRecommendation && <Recommendation AiResponse={AiResponse} />}
       </div>
       <Toaster position="top-right" />

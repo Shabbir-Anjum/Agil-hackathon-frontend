@@ -9,6 +9,7 @@ const ChatIndex = () => {
   return (
     <ProtectedRoute>
       <ChatLayout>
+        
         <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
