@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import AddToCalendar from '@/services/AddToCalendar';
 import { FaCalendarPlus } from 'react-icons/fa';
-const Recommendation = ({ AiResponse }) => {
+const Recommendation = ({ AiResponse },{event}) => {
   const { dates, location } = AiResponse;
 
   return (
@@ -21,16 +21,16 @@ const Recommendation = ({ AiResponse }) => {
           transition={{ delay: 0.2 * (index + 1) }}
           className="bg-white rounded-lg shadow-md p-4 mb-4"
         >
-          <h4 className="text-lg font-semibold mb-2 text-gray-700">Outing {index + 1}</h4>
+          <h4 className="text-lg font-semibold mb-2 text-gray-700">{event}</h4>
           <p className="text-gray-600 mb-1">{item.date}</p>
           <p className="text-gray-800">Location: {location[0]}</p>
           
           <AddToCalendar
   eventDetails={{
-    summary:'Event',
-    location: location[0] ? location[0] : 'Unknown Location',
-    startDateTime: '2024-08-10T10:00:00Z',
-    endDateTime: '2024-09-10T11:00:00Z'
+    summary:'Outing',
+    location: location[0] ? location[0]: 'Unknown Location',
+   startDateTime: '2024-08-18T10:00:00Z',
+    endDateTime: '2024-08-19T11:00:00Z'
   }}
 >
             {({ onClick, isAdding }) => (

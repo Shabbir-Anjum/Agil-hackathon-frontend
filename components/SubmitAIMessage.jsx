@@ -19,12 +19,13 @@ const Loader = () => (
   </motion.div>
 );
 
-const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIMessage }) => {
+const SubmitAIMessage = ({ currentRoom, currentuser, setShowSubmitAIMessage }) => {
   const [outing_topic, setOutingName] = useState("");
   const [location, setAddress] = useState("");
   const [showRecommendation, setShowRecommendation] = useState(false);
   const [AiResponse, setAiResponse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [event, setevent]= useState('')
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -34,7 +35,9 @@ const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIM
         location: location,
         send_from: currentuser,
       });
+      
       setOutingName("");
+      
       setAddress("");
       setAiResponse(response);
       toast.success("Received recommendation successfully!");
@@ -79,7 +82,7 @@ const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIM
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
                 placeholder="Enter outing name"
                 value={outing_topic}
-                onChange={(e) => setOutingName(e.target.value)}
+                onChange={(e) => {setOutingName(e.target.value); setevent(e.target.value)}}
               />
             </motion.div>
             <motion.div
@@ -106,7 +109,7 @@ const SubmitAIMessage = ({ currentRoom, currentuser, serverUrl, setShowSubmitAIM
           </form>
         </div>
         {isLoading && <Loader />}
-        {showRecommendation && <Recommendation AiResponse={AiResponse} />}
+        {showRecommendation && <Recommendation AiResponse={AiResponse} event={event} />}
       </div>
       <Toaster position="top-right" />
     </motion.div>
